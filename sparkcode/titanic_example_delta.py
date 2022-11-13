@@ -1,78 +1,96 @@
-from pyspark.sql import functions as f
 from pyspark.sql import SparkSession
-from delta.tables import *
+from pyspark.sql import functions as f
+from pyspark.sql.window import Window as w
 
-spark = (
-    SparkSession.builder
-    .config("spark.jars.packages", "io.delta:delta-core_2.12:2.1.0")
-    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
-    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
-    .getOrCreate()
+def write_parquet(df, folder, mode):
+    data = (
+        df
+        .write
+        .mode(mode)
+        .format('parquet')
+        .save(folder)
+    )
+    return data
+
+def read_parquet(sp, folder):
+    spark = (
+        sp
+        .read
+        .parquet(folder)
+    )
+    return spark
+
+overwrite_opt = True
+
+def get_writemode ():
+    return 'overwrite'
+
+spark = ( SparkSession.\
+        builder.\
+        appName("pyspark-titanic").\
+        getOrCreate()
 )
 
 spark.sparkContext.setLogLevel("WARN")
 
+raw_folder_path = "s3://pucminas-orquestracao/raw/titanic/"
+raw_sep = ";"
+raw_header = True
+raw_enconding = "latin1"
 
+parquet_folder_path = "s3://pucminas-orquestracao/silver/titanic_delta/"
 
 print("Reading CSV file from S3...")
+data = spark.read.option("encoding", raw_enconding).csv(path=raw_folder_path, sep=raw_sep, header=raw_header)
 
-schema = "PassengerId int, Survived int, Pclass int, Name string, Sex string, Age double, SibSp int, Parch int, Ticket string, Fare double, Cabin string, Embarked string"
-df = spark.read.csv(
-    "s3://pucminas-orquestracao/raw/titanic", 
-    header=True, schema=schema, sep=";"
+data = (
+    data
+        .select(["PassengerId", "Survived", "Pclass", "Name", 
+                     "Sex", "Age", "SibSp", "Parch", 
+                     "Ticket", "Fare", "Cabin", 
+                     "Embarked"])
+        
+        .withColumn("PassengerId", f.col("PassengerId").cast("int"))
+        .withColumn("Survived", f.col("Survived").cast("int"))
+        .withColumn("Pclass", f.col("Pclass").cast("int"))
+        .withColumn("Name", f.col("Name").cast("string"))
+        .withColumn("Sex", f.col("Sex").cast("string"))
+        .withColumn("Age", f.col("Age").cast("double"))
+        .withColumn("SibSp", f.col("SibSp").cast("int"))
+        .withColumn("Parch", f.col("Parch").cast("int"))
+        .withColumn("Ticket", f.col("Ticket").cast("string"))
+        .withColumn("Fare", f.col("Fare").cast("double"))
+        .withColumn("Cabin", f.col("Cabin").cast("string"))
+        .withColumn("Embarked", f.col("Embarked").cast("string"))
 )
 
-print("Writing titanic dataset as a delta table...")
-df.write.format("delta").mode("overwrite").save("s3://pucminas-orquestracao/silver//titanic_delta")
+# escreve parquet
+write_parquet(data, parquet_folder_path, get_writemode(overwrite_opt))
+allparquet = read_parquet(spark, parquet_folder_path)
+df = read_parquet(spark, parquet_folder_path)
 
 print("Indicador 01 - Total de passageiros por sexo e classe")
-new1 = df.groupby(['Sex','Pclass']).agg({
-    "PassengerId":"sum"
-}).reset_index()
-new1.rename(columns = {'PassengerId':'total_passageiros'}, inplace = True)
+new1 = (
+             df
+                 .groupBy("Sex", "Pclass")
+                 .agg(
+                    f.sum("PassengerId").cast("int").alias("total_passageiros"),
+                 )
+            )
 
+total_pas_sex_class = parquet_folder_path+'total_pas_sex_class/'
+write_parquet(new1, total_pas_sex_class, get_writemode(overwrite_opt))
+total_pas_sex_classparquet = read_parquet(spark, total_pas_sex_class)
 
 print("Indicador02 -  Preço médio da tarifa pago por sexo e classe (produzir e escrever)")
-new2 = df.groupby(['Sex','Pclass']).agg({
-    "Fare":"mean"
-}).reset_index()    
-new2.rename(columns = {'Fare':'preco_medio'}, inplace = True)
-new2['preco_medio'] = new2['preco_medio'].round(decimals = 2)
+new2 = (
+             df
+                 .groupBy("Sex", "Pclass")
+                 .agg(
+                    f.mean("Fare").cast("decimal(10,2)").alias("preco_medio"),
+                 )
+            )
 
-
-print("Create a delta table object...")
-old = DeltaTable.forPath(spark, "s3://pucminas-orquestracao/silver/titanic_delta")
-
-print("UPSERT...")
-# UPSERT
-(
-    old.alias("old")
-    .merge(new1.alias("new1"), 
-    "old.PassengerId = new1.PassengerId"
-    )
-    .whenMatchedUpdateAll()
-    .whenNotMatchedInsertAll()
-    .execute()
-)
-
-(
-    old.alias("old")
-    .merge(new2.alias("new2"), 
-    "old.PassengerId = new2.PassengerId"
-    )
-    .whenMatchedUpdateAll()
-    .whenNotMatchedInsertAll()
-    .execute()
-)
-
-print("Checking if everything is ok")
-print("New data...")
-
-(
-    spark.read.format("delta")
-    .load("s3://pucminas-orquestracao/silver/titanic_delta")
-   # .where("PassengerId < 6 OR PassengerId > 888")
-    .show()
-)
-
-old.generate("symlink_format_manifest")
+media_preco_sex_class = parquet_folder_path+'media_preco_sex_class/'
+write_parquet(new2, media_preco_sex_class, get_writemode(overwrite_opt))
+media_preco_sex_classparquet = read_parquet(spark, media_preco_sex_class)

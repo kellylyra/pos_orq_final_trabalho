@@ -59,18 +59,18 @@ $ helm install airflow apache-airflow/airflow \
 
 listar se esta rodando››
 ```
-$ kubectl get pods -n airflow_k2k
+$ kubectl get pods -n airflowkk
 ```
 
 listar os clusters
 ```
-$ kubectl get svc -n airflow_k2k
+$ kubectl get svc -n airflowkk
 ```
 
 # pagina web
 ```
-$ kubectl get pods -n airflow_k2k
-$ kubectl get svc -n airflow_k2k
+$ kubectl get pods -n airflowkk
+$ kubectl get svc -n airflowkk
 ```
 
 Colocar o caminho do DNS publico, que aparece no LoadBalancer, nao esquecer a porta :8080

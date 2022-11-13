@@ -58,7 +58,7 @@ def indicadores_titanic():
                 'Ec2SubnetId': 'subnet-0b52d6d3428579697'
             },
 
-            Applications=[{'Name': 'Spark'}, {'Name': 'Hive'}],
+            Applications=[{'Name': 'Spark'}],
         )
         return cluster_id["JobFlowId"]
 
@@ -89,7 +89,6 @@ def indicadores_titanic():
                     'HadoopJarStep': {
                         'Jar': 'command-runner.jar',
                         'Args': ['spark-submit',
-                                '--master', 'yarn',
                                 '--deploy-mode', 'cluster',
                                 '--packages', 'io.delta:delta-core_2.12:2.1.0',
                                 's3://pucminas-script/titanic/titanic_example_delta.py'
@@ -102,14 +101,14 @@ def indicadores_titanic():
 
     @task
     def wait_emr_job(cid: str, stepId: str):
-        waiter = client.get_waiter('cluster_running')
+        waiter = client.get_waiter('step_complete')
 
         waiter.wait(
             ClusterId=cid,
             StepId=stepId,
             WaiterConfig={
                 'Delay': 30,
-                'MaxAttempts': 60
+                'MaxAttempts': 600
             }
         )
         return True
