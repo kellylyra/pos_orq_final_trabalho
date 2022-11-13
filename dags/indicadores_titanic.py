@@ -102,16 +102,17 @@ def indicadores_titanic():
 
     @task
     def wait_emr_job(cid: str, stepId: str):
-        waiter = client.get_waiter('step_complete')
+        waiter = client.get_waiter('cluster_running')
 
         waiter.wait(
             ClusterId=cid,
             StepId=stepId,
             WaiterConfig={
-                'Delay': 10,
-                'MaxAttempts': 600
+                'Delay': 30,
+                'MaxAttempts': 60
             }
         )
+        return True
     
     @task
     def terminate_emr_cluster(cid: str):
