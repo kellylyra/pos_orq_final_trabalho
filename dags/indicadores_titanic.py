@@ -90,7 +90,6 @@ def indicadores_titanic():
                         'Jar': 'command-runner.jar',
                         'Args': ['spark-submit',
                                 '--deploy-mode', 'cluster',
-                                '--packages', 'io.delta:delta-core_2.12:2.1.0',
                                 's3://pucminas-script/titanic/titanic_example_delta.py'
                                 ]
                     }
