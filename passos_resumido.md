@@ -124,28 +124,13 @@ var2
 
 - adicionar no git hub
 
-# rodar dag no airflow
-
-## erro criar emr
-ssh -i ney-pucminas-testes.pem a39d875eaac53443ab7d27e9887913d5-949581879.us-east-1.elb.amazonaws.com
-
-### Lista todas as apliacoes que rodaram
-```
-$ yarm app -list -appStates ALL
-```
-
-### copiar o State acima e acrescentar no codigo abaixo
-```
-$ yarn logs -applicationId ...
-```
-
 ## logs aws
 
 ** IMPORTANTE** 
 - LISTAR O .SHOW()
 - Adicionar SSH no VPC - IP
 
-### Logs
+
 ```
 $ ssh -i ec2-kellylyra.pem hadoop@ec2-52-23-220-141.compute-1.amazonaws.com
 ```
