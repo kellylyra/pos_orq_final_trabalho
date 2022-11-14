@@ -40,6 +40,11 @@
 ![DAG Airflow GRAPH](./imagens/4_grafic.png "DAG Airflow GRAPH")
 
 ## ✅5. Print do Notebook mostrando a tabela final com `.show()`
+
+```
+$ ssh -i ec2-kellylyra.pem hadoop@ec2-52-23-220-141.compute-1.amazonaws.com
+```
+
 ![Show tabela final](./imagens/5_show.png "Show tabela final")
 
 **Arquivos criados no S3**
