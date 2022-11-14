@@ -343,5 +343,5 @@ $ kubectl delete pvc --all -n airflow
 # Deletar as stacks no CloudFormation
 
 ```
-$ eksctl delete cluster --region=us-east-1 --name=kubea3datatrabalhokelly2
+$ eksctl delete cluster --region=us-east-1 --name=kubea3datak2k
 ```

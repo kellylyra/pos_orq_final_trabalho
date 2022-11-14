@@ -127,7 +127,7 @@ var2
 # rodar dag no airflow
 
 ## erro criar emr
-ssh -i ney-pucminas-testes.pem hsdjfhkjdhf.computer-1.amaonsws.com
+ssh -i ney-pucminas-testes.pem a39d875eaac53443ab7d27e9887913d5-949581879.us-east-1.elb.amazonaws.com
 
 
 ## logs aws

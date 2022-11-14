@@ -55,7 +55,7 @@ def indicadores_titanic():
                 'Ec2KeyName': 'ec2-kellylyra',
                 'KeepJobFlowAliveWhenNoSteps': True,
                 'TerminationProtected': False,
-                'Ec2SubnetId': 'subnet-0b52d6d3428579697'
+                'Ec2SubnetId': 'subnet-07f18addfaf2e8ccc'
             },
 
             Applications=[{'Name': 'Spark'}],

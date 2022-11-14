@@ -33,12 +33,17 @@ spark = ( SparkSession.\
 
 spark.sparkContext.setLogLevel("WARN")
 
-raw_folder_path = "s3://pucminas-orquestracao/raw/titanic.csv"
+#raw_folder_path = "s3://pucminas-orquestracao/raw/titanic/"
+#raw_sep = ";"
+#raw_header = True
+#raw_enconding = "latin1"
+#parquet_folder_path = "s3://pucminas-orquestracao/silver/titanic_delta/"
+
+raw_folder_path = "teste/"
 raw_sep = ";"
 raw_header = True
 raw_enconding = "latin1"
-
-parquet_folder_path = "s3://pucminas-orquestracao/silver/titanic_delta/"
+parquet_folder_path = "teste/saida/"
 
 print("Reading CSV file from S3...")
 data = spark.read.option("encoding", raw_enconding).csv(path=raw_folder_path, sep=raw_sep, header=raw_header)
