@@ -140,9 +140,13 @@ $ yarn logs -applicationId ...
 ```
 
 ## logs aws
+
+** IMPORTANTE** 
+LISTAR O .SHOW()
+
 download logs
 ```
-$ ssh -i ney-pucminas-testes.pem xpto.compute-1.amazonaws.com
+$ ssh -i ec2-kellylyra.pem hadoop@ec2-52-23-220-141.compute-1.amazonaws.com
 ```
 
 ## Lista todas as plicacoes que rodaram
@@ -173,7 +177,7 @@ $ kubectl get pods -n airflow
 
 ## IMPORTATE - Desistalando o airflow e todos os recursos associados
 ```
-$ helm delete airflow -n airflow
+$ helm delete airflow -n airflowk1
 ```
 
 ## listar status dos recursos
@@ -181,20 +185,20 @@ garantir que esta sendo removido
 
 - loadbalance
 ```
-$ kubectl get svc -n airflow
+$ kubectl get svc -n airflowk1
 ```
 caso nao remova, fazer manualmente
 ```
-$ kubectl delete svc --all -n airflow
+$ kubectl delete svc --all -n airflowk1
 ```
 
 - pvc
 ```
-$ kubectl get pvc -n airflow
+$ kubectl get pvc -n airflowk1
 ```
 caso nao remova, fazer manualmente
 ```
-$ kubectl delete pvc --all -n airflow
+$ kubectl delete pvc --all -n airflowk1
 ```
 
 # Deletar as stacks no CloudFormation

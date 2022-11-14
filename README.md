@@ -51,3 +51,11 @@
 Para envio só serão aceitos arquivos com extensão 'jpg', 'jpeg' ou 'png'.
 
 **DEADLINE - 16 de novembro de 2022**
+
+
+Dupla:
+- Kelly Frazão Lyra 
+- Keylom Emanuel Souza Bebiano
+
+Repositório Git
+- https://github.com/kellylyra/pos_orq_final_trabalho.git
