@@ -142,9 +142,10 @@ $ yarn logs -applicationId ...
 ## logs aws
 
 ** IMPORTANTE** 
-LISTAR O .SHOW()
+- LISTAR O .SHOW()
+- Adicionar SSH no VPC - IP
 
-download logs
+### Logs
 ```
 $ ssh -i ec2-kellylyra.pem hadoop@ec2-52-23-220-141.compute-1.amazonaws.com
 ```
