@@ -129,6 +129,15 @@ var2
 ## erro criar emr
 ssh -i ney-pucminas-testes.pem a39d875eaac53443ab7d27e9887913d5-949581879.us-east-1.elb.amazonaws.com
 
+### Lista todas as apliacoes que rodaram
+```
+$ yarm app -list -appStates ALL
+```
+
+### copiar o State acima e acrescentar no codigo abaixo
+```
+$ yarn logs -applicationId ...
+```
 
 ## logs aws
 download logs
@@ -191,5 +200,5 @@ $ kubectl delete pvc --all -n airflow
 # Deletar as stacks no CloudFormation
 
 ```
-$ eksctl delete cluster --region=us-east-1 --name=kubea3datatrabalhokelly2
+$ eksctl delete cluster --region=us-east-1 --name=kubea3datak1
 ```
