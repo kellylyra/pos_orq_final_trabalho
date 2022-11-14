@@ -33,7 +33,7 @@ def indicadores_titanic():
             ServiceRole='EMR_DefaultRole',
             JobFlowRole='EMR_EC2_DefaultRole',
             VisibleToAllUsers=True,
-            LogUri='s3://pucminas-log/elasticmapreduce/',
+            LogUri='s3://pucminas-log/log/',
             ReleaseLabel='emr-6.8.0',
             Instances={
                 'InstanceGroups': [

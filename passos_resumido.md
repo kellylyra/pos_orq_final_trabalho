@@ -4,7 +4,7 @@
 ### Criar cluster
 ```
 $ eksctl create cluster \
-    --name=kubea3datak2k \
+    --name=kubea3datak1 \
     --version=1.21 \
     --managed \
     --instance-types=m5.xlarge \
@@ -13,7 +13,7 @@ $ eksctl create cluster \
     --nodes-min=2 --nodes-max=3 \
     --full-ecr-access \
     --asg-access \
-    --nodegroup-name=ng-kubea3datak2k \
+    --nodegroup-name=ng-kubea3datak1 \
     --timeout=60m
 ```
 
@@ -29,7 +29,7 @@ Ver namespace
 
 ### Criar namespace
 ```
-$ kubectl create namespace airflowkk
+$ kubectl create namespace airflowk1
 ```
 
 ## Criar parta no vscode rais chamada: airflow_k2k
@@ -38,7 +38,7 @@ $ kubectl create namespace airflowkk
 
 ```
 $ helm repo add apache-airflow https://airflow.apache.org
-$ helm show values apache-airflow/airflow >> airflowkk/custom_values.yaml
+$ helm show values apache-airflow/airflow >> airflowk1/custom_values.yaml
 ```
 
 # Configurar custom_values.yaml, alterar linhas
@@ -49,8 +49,8 @@ Comecar o deployment do airflow, comeca a instalacao no cluster kubernetes
 
 ```
 $ helm install airflow apache-airflow/airflow \
-    -f airflowkk/custom_values.yaml \
-    -n airflowkk \
+    -f airflowk1/custom_values.yaml \
+    -n airflowk1 \
     --create-namespace \
     --version 1.7.0 \
     --timeout 5m \
@@ -59,18 +59,18 @@ $ helm install airflow apache-airflow/airflow \
 
 listar se esta rodando››
 ```
-$ kubectl get pods -n airflowkk
+$ kubectl get pods -n airflowk1
 ```
 
 listar os clusters
 ```
-$ kubectl get svc -n airflowkk
+$ kubectl get svc -n airflowk1
 ```
 
 # pagina web
 ```
-$ kubectl get pods -n airflowkk
-$ kubectl get svc -n airflowkk
+$ kubectl get pods -n airflowk1
+$ kubectl get svc -n airflowk1
 ```
 
 Colocar o caminho do DNS publico, que aparece no LoadBalancer, nao esquecer a porta :8080
@@ -113,7 +113,7 @@ var2
 - val: xxx # secrets access key
 - description: Secrets Access Key para AWS
 
-## EC2
+## emr >> EC2
 ### criar ke pair
 
 ### criar security group
